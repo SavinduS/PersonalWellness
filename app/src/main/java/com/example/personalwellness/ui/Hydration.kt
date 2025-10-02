@@ -39,7 +39,8 @@ class Hydration : Fragment() {
     private var currentIntake = 0
     private val dailyGoal = 3000 // ml
     private var customAmount = 250 // default ml
-    private val reminderIntervals = listOf(15, 30, 45, 60, 90, 120, 180)
+    // 🔹 Added 0 for "30 seconds (demo)"
+    private val reminderIntervals = listOf(0, 15, 30, 45, 60, 90, 120, 180)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -59,7 +60,7 @@ class Hydration : Fragment() {
 
         btnSettings.setOnClickListener {
             scheduleHydrationReminder()
-            }
+        }
 
         // Hydration UI
         waterHistory = view.findViewById(R.id.waterHistory)
@@ -98,7 +99,7 @@ class Hydration : Fragment() {
 
         updateAmountLabel()
 
-        // 🔹 Load saved hydration progress + history
+        // Load saved hydration progress + history
         val hydrationPrefs = requireContext().getSharedPreferences("hydration_prefs", Context.MODE_PRIVATE)
         currentIntake = hydrationPrefs.getInt(KEY_CURRENT_INTAKE, 0)
         updateProgress()
@@ -158,7 +159,7 @@ class Hydration : Fragment() {
         addHistoryEntry(time, amount, save = true)
         updateProgress()
 
-        // ✅ Save intake to SharedPreferences
+        // Save intake to SharedPreferences
         val prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         prefs.edit()
             .putInt(KEY_CURRENT_INTAKE, currentIntake)
@@ -218,20 +219,15 @@ class Hydration : Fragment() {
     private fun resetHydrationData() {
         currentIntake = 0
 
-        // Clear prefs
         val prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         prefs.edit()
             .putInt(KEY_CURRENT_INTAKE, 0)
             .putString(KEY_HISTORY_DATA, "[]")
             .apply()
 
-        // Reset progress
         updateProgress()
-
-        // Clear history views
         waterHistory.removeAllViews()
 
-        // Restore placeholder
         val icon = ImageView(requireContext()).apply {
             id = R.id.historyIcon
             setImageResource(R.drawable.ic_water)
@@ -276,14 +272,6 @@ class Hydration : Fragment() {
 
         hydrationPrefs.edit().putInt(KEY_REMINDER_INTERVAL, intervalMinutes).apply()
 
-        val receiverPrefs = context.getSharedPreferences(
-            HydrationReceiver.PREFS_NAME,
-            Context.MODE_PRIVATE
-        )
-        receiverPrefs.edit()
-            .putInt(HydrationReceiver.KEY_REMINDER_INTERVAL_MINUTES, intervalMinutes)
-            .apply()
-
         val intent = Intent(context, HydrationReceiver::class.java).apply {
             putExtra(HydrationReceiver.KEY_REMINDER_INTERVAL_MINUTES, intervalMinutes)
         }
@@ -302,49 +290,55 @@ class Hydration : Fragment() {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(pendingIntent)
 
-        val intervalMillis = intervalMinutes.toLong() * 60_000L
+        // 🔹 Handle 30 seconds demo case
+        val intervalMillis = if (intervalMinutes == 0) {
+            30 * 1000L // 30 seconds
+        } else {
+            intervalMinutes.toLong() * 60_000L
+        }
         val triggerTime = System.currentTimeMillis() + intervalMillis
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                triggerTime,
-                pendingIntent
-            )
-        } else {
-            alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                triggerTime,
-                intervalMillis,
-                pendingIntent
-            )
-        }
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            triggerTime,
+            intervalMillis,
+            pendingIntent
+        )
 
-        Toast.makeText(
-            context,
-            "Reminder set for ${formatIntervalDescription(intervalMinutes)}",
-            Toast.LENGTH_SHORT
-        ).show()
+        val msg = if (intervalMinutes == 0) {
+            "Reminder set for every 30 seconds (demo)"
+        } else {
+            "Reminder set for ${formatIntervalDescription(intervalMinutes)}"
+        }
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
     }
 
     private fun formatIntervalLabel(minutes: Int): String {
-        val hours = minutes / 60
-        val remainingMinutes = minutes % 60
-        val parts = mutableListOf<String>()
-        if (hours > 0) {
-            parts.add(if (hours == 1) "1 hour" else "$hours hours")
+        return if (minutes == 0) {
+            "Every 30 seconds"
+        } else {
+            val hours = minutes / 60
+            val remainingMinutes = minutes % 60
+            val parts = mutableListOf<String>()
+            if (hours > 0) {
+                parts.add(if (hours == 1) "1 hour" else "$hours hours")
+            }
+            if (remainingMinutes > 0) {
+                parts.add("$remainingMinutes minutes")
+            }
+            if (parts.isEmpty()) {
+                parts.add("0 minutes")
+            }
+            "Every ${parts.joinToString(" ")}"
         }
-        if (remainingMinutes > 0) {
-            parts.add("$remainingMinutes minutes")
-        }
-        if (parts.isEmpty()) {
-            parts.add("0 minutes")
-        }
-        return "Every ${parts.joinToString(" ")}"
     }
 
     private fun formatIntervalDescription(minutes: Int): String {
-        val label = formatIntervalLabel(minutes)
-        return label.replaceFirstChar { it.lowercase(Locale.getDefault()) }
+        return if (minutes == 0) {
+            "every 30 seconds"
+        } else {
+            val label = formatIntervalLabel(minutes)
+            label.replaceFirstChar { it.lowercase(Locale.getDefault()) }
+        }
     }
 }
