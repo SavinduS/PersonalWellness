@@ -14,20 +14,22 @@
         android:orientation="vertical"
         android:padding="12dp">
 
-        <!-- Top Row: Emoji + Name + Goal -->
+        <!-- Top Row: Emoji + Name + Goal + Actions -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
+            <!-- Emoji -->
             <TextView
                 android:id="@+id/habitEmoji"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="🏃"
-                android:textSize="22sp"/>
+                android:textSize="22sp" />
 
+            <!-- Name + Goal -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -41,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:text="Exercise"
                     android:textStyle="bold"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/habitGoal"
@@ -49,14 +51,36 @@
                     android:layout_height="wrap_content"
                     android:text="Goal: 30 minutes"
                     android:textSize="12sp"
-                    android:textColor="@color/colorTextSecondary"/>
+                    android:textColor="@color/colorTextSecondary" />
             </LinearLayout>
 
-            <!-- Checkbox to mark completed -->
+            <!-- Checkbox -->
             <CheckBox
                 android:id="@+id/habitCheckBox"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
+
+            <!-- Edit Habit -->
+            <ImageButton
+                android:id="@+id/btnEditHabit"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_edit"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Edit Habit"
+                android:tint="@color/colorPrimary"
+                android:layout_marginStart="4dp"/>
+
+            <!-- Delete Habit -->
+            <ImageButton
+                android:id="@+id/btnDeleteHabit"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_delete"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Delete Habit"
+                android:tint="@android:color/holo_red_dark"
+                android:layout_marginStart="4dp"/>
         </LinearLayout>
 
         <!-- Progress Bar -->
@@ -69,7 +93,7 @@
             android:progress="0"
             android:max="100"
             android:progressTint="@color/colorSecondary"
-            android:backgroundTint="@color/colorTextSecondary"/>
+            android:backgroundTint="@color/colorTextSecondary" />
 
         <!-- Counter with +/- -->
         <LinearLayout
@@ -83,7 +107,7 @@
                 android:id="@+id/btnHabitDecrease"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="–"/>
+                android:text="–" />
 
             <TextView
                 android:id="@+id/habitCounter"
@@ -92,13 +116,13 @@
                 android:text="0"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:layout_marginHorizontal="24dp"/>
+                android:layout_marginHorizontal="24dp" />
 
             <Button
                 android:id="@+id/btnHabitIncrease"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="+"/>
+                android:text="+" />
         </LinearLayout>
 
         <!-- Status Text -->
@@ -108,6 +132,6 @@
             android:layout_height="wrap_content"
             android:text="0 / 30 minutes"
             android:textSize="12sp"
-            android:layout_marginTop="4dp"/>
+            android:layout_marginTop="4dp" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
