@@ -1,6 +1,7 @@
 package com.example.personalwellness
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -11,6 +12,9 @@ import com.example.personalwellness.ui.Hydration
 
 class MainActivity : AppCompatActivity() {
 
+    private var backPressedTime: Long = 0
+    private var toast: Toast? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -18,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
         if (savedInstanceState == null) {
-            loadFragment(Home())  // ✅ this should now resolve
+            loadFragment(Home())
             bottomNav.selectedItemId = R.id.nav_home
         }
 
@@ -39,5 +43,18 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .commit()
+    }
+
+    // ✅ Double back press to exit
+    override fun onBackPressed() {
+        if (backPressedTime + 2000 > System.currentTimeMillis()) {
+            toast?.cancel()
+            super.onBackPressed()
+            finishAffinity() // closes the app
+        } else {
+            toast = Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT)
+            toast?.show()
+        }
+        backPressedTime = System.currentTimeMillis()
     }
 }
