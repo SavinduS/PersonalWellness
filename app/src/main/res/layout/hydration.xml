@@ -66,6 +66,24 @@
                 android:contentDescription="Settings" />
         </RelativeLayout>
 
+        <!-- Reminder Interval Section -->
+        <TextView
+            android:id="@+id/tvReminderTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reminder Interval"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerReminderInterval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp" />
         <!-- Custom Amount Section -->
         <TextView
             android:layout_width="wrap_content"
