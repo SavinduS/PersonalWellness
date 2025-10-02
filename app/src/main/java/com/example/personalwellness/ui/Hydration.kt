@@ -99,11 +99,11 @@ class Hydration : Fragment() {
         updateAmountLabel()
 
         // 🔹 Load saved hydration progress + history
-        val prefs = requireContext().getSharedPreferences("hydration_prefs", Context.MODE_PRIVATE)
-        currentIntake = prefs.getInt(KEY_CURRENT_INTAKE, 0)
+        val hydrationPrefs = requireContext().getSharedPreferences("hydration_prefs", Context.MODE_PRIVATE)
+        currentIntake = hydrationPrefs.getInt(KEY_CURRENT_INTAKE, 0)
         updateProgress()
 
-        val historyJson = prefs.getString(KEY_HISTORY_DATA, "[]")
+        val historyJson = hydrationPrefs.getString(KEY_HISTORY_DATA, "[]")
         val jsonArray = JSONArray(historyJson)
         if (jsonArray.length() > 0) {
             removePlaceholder()
@@ -261,15 +261,45 @@ class Hydration : Fragment() {
 
     /** Schedules hydration reminders with AlarmManager */
     private fun scheduleHydrationReminder() {
-        val prefs = requireContext().getSharedPreferences(HydrationReceiver.PREFS_NAME, Context.MODE_PRIVATE)
-        prefs.edit().putInt(HydrationReceiver.KEY_REMINDER_INTERVAL_MINUTES, intervalMinutes).apply()
+        val context = requireContext()
+        val hydrationPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+
+        val selectedPosition = reminderSpinner.selectedItemPosition
+        val intervalMinutes = if (
+            selectedPosition != AdapterView.INVALID_POSITION &&
+            selectedPosition in reminderIntervals.indices
+        ) {
+            reminderIntervals[selectedPosition]
+        } else {
+            hydrationPrefs.getInt(KEY_REMINDER_INTERVAL, DEFAULT_REMINDER_INTERVAL)
+        }
+
+        hydrationPrefs.edit().putInt(KEY_REMINDER_INTERVAL, intervalMinutes).apply()
+
+        val receiverPrefs = context.getSharedPreferences(
+            HydrationReceiver.PREFS_NAME,
+            Context.MODE_PRIVATE
+        )
+        receiverPrefs.edit()
+            .putInt(HydrationReceiver.KEY_REMINDER_INTERVAL_MINUTES, intervalMinutes)
+            .apply()
+
+        val intent = Intent(context, HydrationReceiver::class.java).apply {
+            putExtra(HydrationReceiver.KEY_REMINDER_INTERVAL_MINUTES, intervalMinutes)
+        }
+        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        } else {
+            PendingIntent.FLAG_UPDATE_CURRENT
+        }
         val pendingIntent = PendingIntent.getBroadcast(
-            requireContext(),
+            context,
             0,
             intent,
             flags
         )
 
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(pendingIntent)
 
         val intervalMillis = intervalMinutes.toLong() * 60_000L
@@ -291,7 +321,7 @@ class Hydration : Fragment() {
         }
 
         Toast.makeText(
-            requireContext(),
+            context,
             "Reminder set for ${formatIntervalDescription(intervalMinutes)}",
             Toast.LENGTH_SHORT
         ).show()
