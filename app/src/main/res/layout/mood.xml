@@ -57,34 +57,117 @@
         android:textSize="18sp"
         android:layout_margin="16dp" />
 
-    <!-- Emoji Row (5 moods) -->
-    <GridLayout
+    <!-- Emoji Row with emoji on top and text below -->
+    <LinearLayout
         android:id="@+id/moodOptionsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnCount="5"
-        android:padding="8dp">
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginHorizontal="16dp"
+        android:weightSum="5">
 
-        <TextView
-            style="@style/MoodOption"
-            android:text="😊\nHappy" />
+        <!-- Happy -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="😊"
+                android:textSize="28sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Happy"
+                android:textSize="14sp"/>
+        </LinearLayout>
 
-        <TextView
-            style="@style/MoodOption"
-            android:text="😢\nSad" />
+        <!-- Sad -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="😢"
+                android:textSize="28sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sad"
+                android:textSize="14sp"/>
+        </LinearLayout>
 
-        <TextView
-            style="@style/MoodOption"
-            android:text="😴\nTired" />
+        <!-- Tired -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="😴"
+                android:textSize="28sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tired"
+                android:textSize="14sp"/>
+        </LinearLayout>
 
-        <TextView
-            style="@style/MoodOption"
-            android:text="😡\nAngry" />
+        <!-- Angry -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="😡"
+                android:textSize="28sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Angry"
+                android:textSize="14sp"/>
+        </LinearLayout>
 
-        <TextView
-            style="@style/MoodOption"
-            android:text="😌\nCalm" />
-    </GridLayout>
+        <!-- Calm -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="😌"
+                android:textSize="28sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Calm"
+                android:textSize="14sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
 
     <!-- Optional Note -->
     <EditText
@@ -134,26 +217,31 @@
     <!-- Content: List + Calendar -->
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <!-- Recent moods list -->
-        <LinearLayout
-            android:id="@+id/recentMoodsLayout"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp" />
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:id="@+id/recentMoodsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp" />
+        </ScrollView>
 
         <!-- Calendar (hidden initially) -->
         <com.prolificinteractive.materialcalendarview.MaterialCalendarView
             android:id="@+id/moodCalendarView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:visibility="gone"
             app:mcv_showOtherDates="all"
             app:mcv_tileHeight="48dp"
             app:mcv_tileWidth="48dp"/>
-
     </FrameLayout>
-
 </LinearLayout>

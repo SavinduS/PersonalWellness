@@ -27,6 +27,7 @@ class Mood : Fragment() {
     private lateinit var calendarView: MaterialCalendarView
 
     private var selectedMood: String? = null
+    private var editingIndex: Int? = null
     private val moodKey = "MOOD_DATA"
 
     override fun onCreateView(
@@ -41,15 +42,19 @@ class Mood : Fragment() {
         tabLayout = view.findViewById(R.id.moodTabLayout)
         calendarView = view.findViewById(R.id.moodCalendarView)
 
-        val moodOptionsLayout = view.findViewById<GridLayout>(R.id.moodOptionsLayout)
+        val moodOptionsLayout = view.findViewById<LinearLayout>(R.id.moodOptionsLayout)
 
-        // Mood options listener
+        // ✅ Mood options listener (LinearLayouts with emoji + label)
         for (i in 0 until moodOptionsLayout.childCount) {
-            val moodView = moodOptionsLayout.getChildAt(i) as TextView
-            moodView.setOnClickListener {
+            val moodLayout = moodOptionsLayout.getChildAt(i) as LinearLayout
+            moodLayout.setOnClickListener {
                 resetMoodSelection(moodOptionsLayout)
-                moodView.setBackgroundResource(R.drawable.mood_selected_bg)
-                selectedMood = moodView.text.toString()
+                moodLayout.setBackgroundResource(R.drawable.mood_selected_bg)
+
+                // Emoji = child 0, Label = child 1
+                val emoji = (moodLayout.getChildAt(0) as TextView).text.toString()
+                val label = (moodLayout.getChildAt(1) as TextView).text.toString()
+                selectedMood = "$emoji $label"
             }
         }
 
@@ -80,7 +85,7 @@ class Mood : Fragment() {
         return view
     }
 
-    private fun resetMoodSelection(layout: GridLayout) {
+    private fun resetMoodSelection(layout: LinearLayout) {
         for (i in 0 until layout.childCount) {
             layout.getChildAt(i).setBackgroundResource(0)
         }
@@ -93,7 +98,6 @@ class Mood : Fragment() {
         }
 
         val note = noteInput.text.toString()
-        // ✅ Save full date + time
         val timeStamp = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(Date())
 
         val moodObj = JSONObject().apply {
@@ -105,11 +109,19 @@ class Mood : Fragment() {
         val prefs = requireContext().getSharedPreferences("mood_prefs", Context.MODE_PRIVATE)
         val existingData = prefs.getString(moodKey, "[]")
         val jsonArray = JSONArray(existingData)
-        jsonArray.put(moodObj)
+
+        if (editingIndex != null) {
+            // ✅ Update existing mood
+            jsonArray.put(editingIndex!!, moodObj)
+            Toast.makeText(requireContext(), "Mood updated successfully!", Toast.LENGTH_SHORT).show()
+            editingIndex = null
+        } else {
+            // ✅ Add new mood
+            jsonArray.put(moodObj)
+            Toast.makeText(requireContext(), "Mood added successfully!", Toast.LENGTH_SHORT).show()
+        }
 
         prefs.edit().putString(moodKey, jsonArray.toString()).apply()
-
-        Toast.makeText(requireContext(), "Mood saved!", Toast.LENGTH_SHORT).show()
         resetInputs()
         loadRecentMoods()
     }
@@ -117,6 +129,13 @@ class Mood : Fragment() {
     private fun resetInputs() {
         noteInput.setText("")
         selectedMood = null
+        editingIndex = null
+
+        // ✅ Restore default background
+        noteInput.setBackgroundResource(R.drawable.edittext_bg)
+
+        saveButton.text = "Save Mood"
+        cancelButton.text = "Cancel"
         resetMoodSelection(requireView().findViewById(R.id.moodOptionsLayout))
     }
 
@@ -126,7 +145,7 @@ class Mood : Fragment() {
         val data = prefs.getString(moodKey, "[]")
         val jsonArray = JSONArray(data)
 
-        for (i in jsonArray.length() - 1 downTo 0) { // latest first
+        for (i in jsonArray.length() - 1 downTo 0) {
             val obj = jsonArray.getJSONObject(i)
             val mood = obj.getString("mood")
             val note = obj.getString("note")
@@ -142,7 +161,12 @@ class Mood : Fragment() {
             val btnDelete = card.findViewById<ImageButton>(R.id.btnDeleteMood)
 
             moodText.text = mood
-            moodNote.text = if (note.isNotEmpty()) note else "(No note)"
+            if (note.isNotEmpty()) {
+                moodNote.visibility = View.VISIBLE
+                moodNote.text = note
+            } else {
+                moodNote.visibility = View.GONE
+            }
             moodTime.text = time
 
             btnEdit.setOnClickListener { editMood(i, obj) }
@@ -155,16 +179,14 @@ class Mood : Fragment() {
     private fun editMood(index: Int, moodObj: JSONObject) {
         selectedMood = moodObj.getString("mood")
         noteInput.setText(moodObj.getString("note"))
+        editingIndex = index
 
-        val prefs = requireContext().getSharedPreferences("mood_prefs", Context.MODE_PRIVATE)
-        val data = prefs.getString(moodKey, "[]")
-        val jsonArray = JSONArray(data)
-        val newArray = JSONArray()
-        for (i in 0 until jsonArray.length()) {
-            if (i != index) newArray.put(jsonArray.getJSONObject(i))
-        }
-        prefs.edit().putString(moodKey, newArray.toString()).apply()
-        loadRecentMoods()
+        saveButton.text = "Update Mood"
+        cancelButton.text = "Cancel Edit"
+
+        // ✅ Highlight background when editing
+        noteInput.setBackgroundColor(resources.getColor(android.R.color.holo_orange_light))
+        Toast.makeText(requireContext(), "Editing selected mood...", Toast.LENGTH_SHORT).show()
     }
 
     private fun deleteMood(index: Int) {
@@ -181,12 +203,12 @@ class Mood : Fragment() {
                 }
                 prefs.edit().putString(moodKey, newArray.toString()).apply()
                 loadRecentMoods()
+                Toast.makeText(requireContext(), "Mood deleted successfully!", Toast.LENGTH_SHORT).show()
             }
             .setNegativeButton("No", null)
             .show()
     }
 
-    // ✅ Safe Calendar integration
     private fun decorateCalendarWithMoods() {
         val prefs = requireContext().getSharedPreferences("mood_prefs", Context.MODE_PRIVATE)
         val data = prefs.getString(moodKey, "[]")
@@ -202,23 +224,19 @@ class Mood : Fragment() {
             if (dateTime.isEmpty()) continue
 
             try {
-                val dateOnly = dateTime.split(" ")[0] // extract "dd/MM/yyyy"
+                val dateOnly = dateTime.split(" ")[0]
                 val parsedDate = sdf.parse(dateOnly) ?: continue
                 val calendar = Calendar.getInstance()
                 calendar.time = parsedDate
                 val day = CalendarDay.from(calendar)
-
-                val emoji = mood.take(2) // safely get emoji
+                val emoji = mood.take(2)
                 moodMap[day] = emoji
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
 
-        // Clear old decorators
         calendarView.removeDecorators()
-
-        // Add new decorators
         for ((day, emoji) in moodMap) {
             calendarView.addDecorator(MoodDecorator(setOf(day), emoji))
         }
