@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="3dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <!-- Top Row: Emoji + Name + Goal -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/habitEmoji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🏃"
+                android:textSize="22sp"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp">
+
+                <TextView
+                    android:id="@+id/habitName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Exercise"
+                    android:textStyle="bold"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/habitGoal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Goal: 30 minutes"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorTextSecondary"/>
+            </LinearLayout>
+
+            <!-- Checkbox to mark completed -->
+            <CheckBox
+                android:id="@+id/habitCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <!-- Progress Bar -->
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:id="@+id/habitProgress"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_marginTop="8dp"
+            android:progress="0"
+            android:max="100"
+            android:progressTint="@color/colorSecondary"
+            android:backgroundTint="@color/colorTextSecondary"/>
+
+        <!-- Counter with +/- -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/btnHabitDecrease"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="–"/>
+
+            <TextView
+                android:id="@+id/habitCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginHorizontal="24dp"/>
+
+            <Button
+                android:id="@+id/btnHabitIncrease"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+"/>
+        </LinearLayout>
+
+        <!-- Status Text -->
+        <TextView
+            android:id="@+id/habitStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 / 30 minutes"
+            android:textSize="12sp"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

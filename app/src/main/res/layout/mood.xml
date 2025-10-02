@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Gradient Header -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:background="@drawable/header_gradient_green"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mood Journal"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true" />
+
+            <!-- Settings / Profile -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btnProfile"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_profile"
+                    android:tint="@android:color/white"
+                    android:background="?attr/selectableItemBackgroundBorderless" />
+
+                <ImageButton
+                    android:id="@+id/btnSettings"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_settings"
+                    android:tint="@android:color/white"
+                    android:background="?attr/selectableItemBackgroundBorderless" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <!-- How are you feeling -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="How are you feeling?"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_margin="16dp" />
+
+        <!-- Emoji Row (5 moods) -->
+        <GridLayout
+            android:id="@+id/moodOptionsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="5"
+            android:padding="8dp">
+
+            <TextView
+                style="@style/MoodOption"
+                android:text="😊\nHappy" />
+
+            <TextView
+                style="@style/MoodOption"
+                android:text="😢\nSad" />
+
+            <TextView
+                style="@style/MoodOption"
+                android:text="😴\nTired" />
+
+            <TextView
+                style="@style/MoodOption"
+                android:text="😡\nAngry" />
+
+            <TextView
+                style="@style/MoodOption"
+                android:text="😌\nCalm" />
+        </GridLayout>
+
+        <!-- Optional Note -->
+        <EditText
+            android:id="@+id/noteInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Add a note (optional)"
+            android:layout_margin="16dp"
+            android:background="@drawable/edittext_bg"
+            android:padding="12dp"
+            android:inputType="textMultiLine" />
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_margin="16dp">
+
+            <Button
+                android:id="@+id/btnCancelMood"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+            android:text="Cancel" />
+
+            <Button
+                android:id="@+id/btnSaveMood"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+            android:text="Save Mood" />
+        </LinearLayout>
+
+        <!-- Recent moods -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recent Moods"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_margin="16dp" />
+
+        <LinearLayout
+            android:id="@+id/recentMoodsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp" />
+    </LinearLayout>
+</ScrollView>

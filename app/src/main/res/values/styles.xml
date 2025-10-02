@@ -1,0 +1,18 @@
+<resources>
+
+    <!-- Existing app themes/styles are already here -->
+
+    <!-- MoodOption style for emoji moods -->
+    <style name="MoodOption">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+</resources>

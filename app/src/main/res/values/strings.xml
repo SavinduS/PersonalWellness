@@ -1,0 +1,31 @@
+<resources>
+    <!-- App Name -->
+    <string name="app_name">PersonalWellness</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title1">Track Your Habits</string>
+    <string name="onboarding_desc1">Stay consistent with daily wellness routines.</string>
+
+    <string name="onboarding_title2">Log Your Mood</string>
+    <string name="onboarding_desc2">Understand yourself better with daily mood tracking.</string>
+
+    <string name="onboarding_title3">Stay Hydrated</string>
+    <string name="onboarding_desc3">Get reminders to drink water and stay healthy.</string>
+
+    <!-- Buttons -->
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
+    <string name="get_started">Get Started</string>
+    <string name="back">Back</string>
+
+    <!-- Login & Signup -->
+    <string name="login_title">Welcome Back</string>
+    <string name="signup_title">Create Account</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="login">Login</string>
+    <string name="signup">Sign Up</string>
+    <string name="no_account">Don’t have an account? Sign up</string>
+    <string name="have_account">Already have an account? Login</string>
+</resources>

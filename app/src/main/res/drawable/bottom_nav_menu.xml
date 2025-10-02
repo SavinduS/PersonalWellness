@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:title="Dashboard"
+        android:icon="@drawable/ic_home"/>
+    <item
+        android:id="@+id/nav_mood"
+        android:title="Mood"
+        android:icon="@drawable/ic_mood"/>
+    <item
+        android:id="@+id/nav_hydration"
+        android:title="Hydration"
+        android:icon="@drawable/ic_water"/>
+    <item
+        android:id="@+id/nav_habits"
+        android:title="Habits"
+        android:icon="@drawable/ic_wellness"/>
+</menu>

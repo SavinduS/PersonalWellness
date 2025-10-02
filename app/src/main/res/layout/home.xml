@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Gradient Header with Profile & Settings -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:background="@drawable/header_gradient"
+            android:padding="16dp">
+
+            <!-- Title + Subtitle on left -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true">
+
+                <TextView
+                    android:id="@+id/tvDashboardTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Wellness Dashboard"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tuesday, September 30, 2025"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/white"
+                    android:layout_marginTop="4dp"/>
+            </LinearLayout>
+
+            <!-- Profile Icon -->
+            <ImageButton
+                android:id="@+id/btnProfile"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_profile"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@android:color/white"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="56dp"
+                android:contentDescription="Profile" />
+
+            <!-- Settings Icon -->
+            <ImageButton
+                android:id="@+id/btnSettings"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_settings"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@android:color/white"
+                android:layout_alignParentEnd="true"
+                android:contentDescription="Settings" />
+        </RelativeLayout>
+
+        <!-- Today's Progress -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Today's Progress"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_margin="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="8dp">
+
+            <!-- Habits Progress -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ProgressBar
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:indeterminate="false"
+                    android:progress="0"
+                    android:max="100"
+                    android:rotation="-90"
+                    android:progressDrawable="@drawable/circle_progress"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Habits\n0%"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_marginTop="8dp"/>
+            </LinearLayout>
+
+            <!-- Hydration Progress -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ProgressBar
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:indeterminate="false"
+                    android:progress="0"
+                    android:max="100"
+                    android:rotation="-90"
+                    android:progressDrawable="@drawable/circle_progress"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hydration\n0%"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_marginTop="8dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Quick Stats -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quick Stats"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_margin="16dp" />
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:padding="8dp">
+
+            <!-- Today's Mood Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardTodayMood"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                android:layout_columnWeight="1"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <!-- Big centered emoji -->
+                    <TextView
+                        android:id="@+id/tvTodayMoodEmoji"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🙂"
+                        android:textSize="28sp"
+                        android:gravity="center" />
+
+                    <!-- Mood text (Happy, Sad, etc.) -->
+                    <TextView
+                        android:id="@+id/tvTodayMoodText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No mood yet"
+                        android:textSize="14sp"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <!-- Water Intake -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                android:layout_columnWeight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="💧"
+                        android:textSize="26sp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0 ml"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Habits Done -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                android:layout_columnWeight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🎯"
+                        android:textSize="26sp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0/4 Habits Done"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Streak -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                android:layout_columnWeight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📈"
+                        android:textSize="26sp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Streak"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </GridLayout>
+
+        <!-- Today's Habits -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Today's Habits"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_margin="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="12dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🏃"
+                        android:textSize="22sp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="Exercise - 0/30 mins"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Repeat similar cards for Meditation, Reading, Sleep -->
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

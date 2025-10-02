@@ -1,0 +1,13 @@
+<resources>
+    <!-- Existing Theme Colors -->
+    <color name="colorPrimary">#2196F3</color> <!-- Blue -->
+    <color name="colorSecondary">#4CAF50</color> <!-- Green -->
+    <color name="colorBackground">#FFFFFF</color> <!-- White -->
+    <color name="colorTextPrimary">#212121</color>
+    <color name="colorTextSecondary">#757575</color>
+
+    <!-- Extra Safe Colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="grayLight">#F5F5F5</color>
+</resources>

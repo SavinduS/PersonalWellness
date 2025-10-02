@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Active (selected) dot -->
+    <item android:state_selected="true">
+        <shape android:shape="oval">
+            <size android:width="12dp" android:height="12dp"/>
+            <solid android:color="@color/colorPrimary"/> <!-- Blue -->
+        </shape>
+    </item>
+
+    <!-- Inactive (unselected) dot -->
+    <item>
+        <shape android:shape="oval">
+            <size android:width="8dp" android:height="8dp"/>
+            <solid android:color="@color/grayLight"/> <!-- Light gray -->
+        </shape>
+    </item>
+
+</selector>

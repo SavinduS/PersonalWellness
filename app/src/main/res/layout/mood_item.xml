@@ -1,0 +1,71 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/moodText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="😊 Happy"
+            android:textStyle="bold"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/moodNote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Note here"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp" />
+
+        <!-- Row with time on left + edit/delete on right -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/moodTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="12:30"
+                android:textSize="12sp"
+                android:textColor="@android:color/darker_gray" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:id="@+id/btnEditMood"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_edit"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Edit" />
+
+                <ImageButton
+                    android:id="@+id/btnDeleteMood"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_delete"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Delete" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
