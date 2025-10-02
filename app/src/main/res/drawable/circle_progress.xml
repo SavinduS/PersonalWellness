@@ -1,13 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
 <rotate xmlns:android="http://schemas.android.com/apk/res/android"
     android:fromDegrees="270"
+    android:pivotX="50%"
+    android:pivotY="50%"
     android:toDegrees="270">
-    <shape android:shape="ring"
-        android:useLevel="true"
+
+    <shape
         android:innerRadiusRatio="3"
-        android:thicknessRatio="10">
-        <gradient
-            android:startColor="#6A11CB"
-            android:endColor="#2575FC"
-            android:type="sweep"/>
+        android:shape="ring"
+        android:thicknessRatio="8"
+        android:useLevel="true">
+
+        <!-- Background circle -->
+        <solid android:color="@color/grayLight" />
+
+        <!-- Progress arc -->
+        <stroke
+            android:width="8dp"
+            android:color="@color/colorSecondary" />
     </shape>
 </rotate>

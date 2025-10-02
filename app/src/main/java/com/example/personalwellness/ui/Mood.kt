@@ -9,6 +9,9 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.personalwellness.R
+import com.google.android.material.tabs.TabLayout
+import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -20,6 +23,8 @@ class Mood : Fragment() {
     private lateinit var saveButton: Button
     private lateinit var cancelButton: Button
     private lateinit var recentMoodsLayout: LinearLayout
+    private lateinit var tabLayout: TabLayout
+    private lateinit var calendarView: MaterialCalendarView
 
     private var selectedMood: String? = null
     private val moodKey = "MOOD_DATA"
@@ -33,6 +38,8 @@ class Mood : Fragment() {
         saveButton = view.findViewById(R.id.btnSaveMood)
         cancelButton = view.findViewById(R.id.btnCancelMood)
         recentMoodsLayout = view.findViewById(R.id.recentMoodsLayout)
+        tabLayout = view.findViewById(R.id.moodTabLayout)
+        calendarView = view.findViewById(R.id.moodCalendarView)
 
         val moodOptionsLayout = view.findViewById<GridLayout>(R.id.moodOptionsLayout)
 
@@ -48,6 +55,25 @@ class Mood : Fragment() {
 
         saveButton.setOnClickListener { saveMood() }
         cancelButton.setOnClickListener { resetInputs() }
+
+        // Tabs
+        tabLayout.addTab(tabLayout.newTab().setText("List"))
+        tabLayout.addTab(tabLayout.newTab().setText("Calendar"))
+
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                if (tab.position == 0) {
+                    recentMoodsLayout.visibility = View.VISIBLE
+                    calendarView.visibility = View.GONE
+                } else {
+                    recentMoodsLayout.visibility = View.GONE
+                    calendarView.visibility = View.VISIBLE
+                    decorateCalendarWithMoods()
+                }
+            }
+            override fun onTabUnselected(tab: TabLayout.Tab) {}
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
 
         loadRecentMoods()
 
@@ -67,7 +93,8 @@ class Mood : Fragment() {
         }
 
         val note = noteInput.text.toString()
-        val timeStamp = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
+        // ✅ Save full date + time
+        val timeStamp = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(Date())
 
         val moodObj = JSONObject().apply {
             put("mood", selectedMood)
@@ -157,5 +184,43 @@ class Mood : Fragment() {
             }
             .setNegativeButton("No", null)
             .show()
+    }
+
+    // ✅ Safe Calendar integration
+    private fun decorateCalendarWithMoods() {
+        val prefs = requireContext().getSharedPreferences("mood_prefs", Context.MODE_PRIVATE)
+        val data = prefs.getString(moodKey, "[]")
+        val jsonArray = JSONArray(data)
+
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val moodMap = mutableMapOf<CalendarDay, String>()
+
+        for (i in 0 until jsonArray.length()) {
+            val obj = jsonArray.getJSONObject(i)
+            val mood = obj.getString("mood")
+            val dateTime = obj.optString("time", "")
+            if (dateTime.isEmpty()) continue
+
+            try {
+                val dateOnly = dateTime.split(" ")[0] // extract "dd/MM/yyyy"
+                val parsedDate = sdf.parse(dateOnly) ?: continue
+                val calendar = Calendar.getInstance()
+                calendar.time = parsedDate
+                val day = CalendarDay.from(calendar)
+
+                val emoji = mood.take(2) // safely get emoji
+                moodMap[day] = emoji
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        // Clear old decorators
+        calendarView.removeDecorators()
+
+        // Add new decorators
+        for ((day, emoji) in moodMap) {
+            calendarView.addDecorator(MoodDecorator(setOf(day), emoji))
+        }
     }
 }
