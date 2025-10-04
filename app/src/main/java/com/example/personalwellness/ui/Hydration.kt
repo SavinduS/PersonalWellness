@@ -1,13 +1,15 @@
 package com.example.personalwellness.ui
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.fragment.app.Fragment   // ✅ must be androidx.fragment.app.Fragment
+import androidx.fragment.app.Fragment
 import com.example.personalwellness.R
-import com.example.personalwellness.receivers.HydrationReminderScheduler
+import com.example.personalwellness.receivers.HydrationScheduler
 import com.example.personalwellness.utils.NotificationHelper
 import org.json.JSONArray
 import org.json.JSONObject
@@ -17,12 +19,12 @@ import java.util.*
 class Hydration : Fragment() {
 
     companion object {
-        private const val PREFS_NAME = HydrationReminderScheduler.PREFS_NAME
+        private const val PREFS_NAME = "hydration_prefs"
         private const val KEY_CURRENT_INTAKE = "CURRENT_INTAKE"
         private const val KEY_DAILY_GOAL = "DAILY_GOAL"
         private const val KEY_HISTORY_DATA = "HISTORY_DATA"
-        private const val KEY_REMINDER_INTERVAL = HydrationReminderScheduler.KEY_REMINDER_INTERVAL_MINUTES
-        private const val DEFAULT_REMINDER_INTERVAL = HydrationReminderScheduler.DEFAULT_INTERVAL_MINUTES
+        private const val KEY_REMINDER_INTERVAL = HydrationScheduler.KEY_REMINDER_INTERVAL_MINUTES
+        private const val DEFAULT_REMINDER_INTERVAL = 60
     }
 
     private lateinit var waterHistory: LinearLayout
@@ -34,7 +36,12 @@ class Hydration : Fragment() {
     private var currentIntake = 0
     private val dailyGoal = 3000 // ml
     private var customAmount = 250 // default ml
-    private val reminderIntervals = listOf(0, 15, 30, 45, 60, 90, 120, 180) // 0 = demo (30s)
+    private val reminderIntervals = listOf(0, 15, 30, 45, 60, 90, 120, 180) // 0 = demo (~15s)
+
+    // ✅ For demo mode (foreground 30s reminders)
+    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var demoRunnable: Runnable
+    private val demoIntervalMillis = 30_000L // 30 seconds
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -82,6 +89,7 @@ class Hydration : Fragment() {
                 val interval = reminderIntervals[position]
                 prefs.edit().putInt(KEY_REMINDER_INTERVAL, interval).apply()
             }
+
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
@@ -247,13 +255,13 @@ class Hydration : Fragment() {
         ) {
             reminderIntervals[selectedPosition]
         } else {
-            HydrationReminderScheduler.getSavedInterval(context)
+            HydrationScheduler.getSavedInterval(context)
         }
 
-        HydrationReminderScheduler.schedule(context, intervalMinutes)
+        HydrationScheduler.schedule(context, intervalMinutes)
 
         val msg = if (intervalMinutes == 0) {
-            "Reminder set for every 30 seconds (demo)"
+            "Reminder set for every 15 seconds (demo)"
         } else {
             "Reminder set for ${formatIntervalDescription(intervalMinutes)}"
         }
@@ -262,7 +270,7 @@ class Hydration : Fragment() {
 
     private fun formatIntervalLabel(minutes: Int): String {
         return if (minutes == 0) {
-            "Every 30 seconds"
+            "Every 15 seconds"
         } else {
             val hours = minutes / 60
             val remainingMinutes = minutes % 60
@@ -276,10 +284,28 @@ class Hydration : Fragment() {
 
     private fun formatIntervalDescription(minutes: Int): String {
         return if (minutes == 0) {
-            "every 30 seconds"
+            "every 15 seconds"
         } else {
             val label = formatIntervalLabel(minutes)
             label.replaceFirstChar { it.lowercase(Locale.getDefault()) }
         }
+    }
+
+    // ✅ Foreground 30s demo reminder (runs while app is visible)
+    override fun onResume() {
+        super.onResume()
+        demoRunnable = Runnable {
+            NotificationHelper(requireContext()).showNotification(
+                "Hydration Reminder",
+                "Time to drink some water!"
+            )
+            handler.postDelayed(demoRunnable, demoIntervalMillis)
+        }
+        handler.postDelayed(demoRunnable, demoIntervalMillis)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacks(demoRunnable)
     }
 }

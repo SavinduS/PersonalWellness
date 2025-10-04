@@ -38,6 +38,10 @@ class Settings : Fragment() {
 
         val prefs = requireContext().getSharedPreferences("app_settings", Context.MODE_PRIVATE)
         val editor = prefs.edit()
+        val btnBack: View = view.findViewById(R.id.btnBack)
+        btnBack.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
 
         // Load saved state for notifications
         val notificationsEnabled = prefs.getBoolean("notifications", true)
