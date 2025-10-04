@@ -28,6 +28,10 @@
     <string name="signup">Sign Up</string>
     <string name="no_account">Don’t have an account? Sign up</string>
     <string name="have_account">Already have an account? Login</string>
+
+    <!-- Hydration Notifications -->
     <string name="notification_channel_hydration_name">Hydration reminders</string>
     <string name="notification_channel_hydration_description">Notifications to remind you to drink water regularly.</string>
+    <string name="notification_hydration_title">Hydration Reminder</string>
+    <string name="notification_hydration_message">Time to drink some water and stay refreshed!</string>
 </resources>
