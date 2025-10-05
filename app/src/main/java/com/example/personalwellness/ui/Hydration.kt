@@ -38,7 +38,7 @@ class Hydration : Fragment() {
     private var customAmount = 250 // default ml
     private val reminderIntervals = listOf(0, 15, 30, 45, 60, 90, 120, 180) // 0 = demo (~15s)
 
-    // ✅ For demo mode (foreground 30s reminders)
+    // For demo mode (foreground 30s reminders)
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var demoRunnable: Runnable
     private val demoIntervalMillis = 30_000L // 30 seconds
@@ -50,7 +50,7 @@ class Hydration : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.hydration, container, false)
 
-        // Header buttons
+        // --- Header buttons ---
         val btnProfile = view.findViewById<ImageButton>(R.id.btnProfile)
         val btnSettings = view.findViewById<ImageButton>(R.id.btnSettings)
 
@@ -62,10 +62,13 @@ class Hydration : Fragment() {
         }
 
         btnSettings.setOnClickListener {
-            scheduleHydrationReminder()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, Settings())
+                .addToBackStack(null)
+                .commit()
         }
 
-        // Hydration UI
+        // --- Hydration UI Elements ---
         waterHistory = view.findViewById(R.id.waterHistory)
         tvAmount = view.findViewById(R.id.tvAmount)
         progressBar = view.findViewById(R.id.progressBar)
@@ -74,6 +77,7 @@ class Hydration : Fragment() {
 
         val prefs = requireContext().getSharedPreferences(PREFS_NAME, android.content.Context.MODE_PRIVATE)
 
+        // --- Reminder Spinner Setup ---
         val spinnerLabels = reminderIntervals.map { formatIntervalLabel(it) }
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, spinnerLabels)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -93,19 +97,20 @@ class Hydration : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
+        // --- Buttons ---
         val btnDecrease = view.findViewById<Button>(R.id.btnDecrease)
         val btnIncrease = view.findViewById<Button>(R.id.btnIncrease)
         val btnAddCustom = view.findViewById<Button>(R.id.btnAddCustom)
+        val btnSetReminder = view.findViewById<Button>(R.id.btnSetReminder)
         val btnReset = view.findViewById<Button>(R.id.btnReset)
 
         updateAmountLabel()
 
-        // Load saved hydration progress + history
-        val hydrationPrefs = requireContext().getSharedPreferences(PREFS_NAME, android.content.Context.MODE_PRIVATE)
-        currentIntake = hydrationPrefs.getInt(KEY_CURRENT_INTAKE, 0)
+        // --- Load saved hydration progress + history ---
+        currentIntake = prefs.getInt(KEY_CURRENT_INTAKE, 0)
         updateProgress()
 
-        val historyJson = hydrationPrefs.getString(KEY_HISTORY_DATA, "[]")
+        val historyJson = prefs.getString(KEY_HISTORY_DATA, "[]")
         val jsonArray = JSONArray(historyJson)
         if (jsonArray.length() > 0) {
             removePlaceholder()
@@ -115,6 +120,7 @@ class Hydration : Fragment() {
             }
         }
 
+        // --- Button Listeners ---
         btnDecrease.setOnClickListener {
             if (customAmount > 50) {
                 customAmount -= 50
@@ -130,6 +136,7 @@ class Hydration : Fragment() {
         }
 
         btnAddCustom.setOnClickListener { addWater(customAmount) }
+        btnSetReminder.setOnClickListener { scheduleHydrationReminder() }
         btnReset.setOnClickListener { resetHydrationData() }
 
         return view
@@ -291,7 +298,7 @@ class Hydration : Fragment() {
         }
     }
 
-    // ✅ Foreground 30s demo reminder (runs while app is visible)
+    // Foreground demo reminder (runs while app is visible)
     override fun onResume() {
         super.onResume()
         demoRunnable = Runnable {

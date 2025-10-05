@@ -39,6 +39,23 @@ class Habits : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.habits, container, false)
 
+        val btnProfile = view.findViewById<ImageButton>(R.id.btnProfile)
+        val btnSettings = view.findViewById<ImageButton>(R.id.btnSettings)
+
+        btnProfile.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, Profile())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        btnSettings.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, Settings())
+                .addToBackStack(null)
+                .commit()
+        }
+
         prefs = requireContext().getSharedPreferences("habits_prefs", Context.MODE_PRIVATE)
         habitContainer = view.findViewById(R.id.habitListContainer)
 

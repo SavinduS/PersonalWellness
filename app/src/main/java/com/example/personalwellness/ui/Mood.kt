@@ -42,6 +42,8 @@ class Mood : Fragment() {
         tabLayout = view.findViewById(R.id.moodTabLayout)
         calendarView = view.findViewById(R.id.moodCalendarView)
 
+        val btnProfile = view.findViewById<ImageButton>(R.id.btnProfile)
+        val btnSettings = view.findViewById<ImageButton>(R.id.btnSettings)
         val moodOptionsLayout = view.findViewById<LinearLayout>(R.id.moodOptionsLayout)
 
         // ✅ Mood options listener (LinearLayouts with emoji + label)
@@ -61,6 +63,19 @@ class Mood : Fragment() {
         saveButton.setOnClickListener { saveMood() }
         cancelButton.setOnClickListener { resetInputs() }
 
+        btnProfile.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, Profile())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        btnSettings.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, Settings())
+                .addToBackStack(null)
+                .commit()
+        }
         // Tabs
         tabLayout.addTab(tabLayout.newTab().setText("List"))
         tabLayout.addTab(tabLayout.newTab().setText("Calendar"))

@@ -2,6 +2,7 @@ package com.example.personalwellness.ui
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -20,6 +21,8 @@ class OnboardingActivity : AppCompatActivity() {
     private lateinit var btnBack: Button
     private lateinit var btnGetStarted: Button
     private lateinit var tabLayout: TabLayout
+    private lateinit var onboardingRoot: View
+    private var backgroundAnimation: AnimationDrawable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +37,17 @@ class OnboardingActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_onboarding)
 
+        onboardingRoot = findViewById(R.id.onboarding_root)
+        backgroundAnimation = (onboardingRoot.background as? AnimationDrawable)?.apply {
+            setEnterFadeDuration(1500)
+            setExitFadeDuration(1500)
+        }
+
+        val rootView = findViewById<View>(R.id.onboarding_root)
+        backgroundAnimation = (rootView.background as? AnimationDrawable)?.apply {
+            setEnterFadeDuration(500)
+            setExitFadeDuration(1500)
+        }
         // Views
         viewPager = findViewById(R.id.viewPager)
         btnSkip = findViewById(R.id.btn_skip)
@@ -103,6 +117,22 @@ class OnboardingActivity : AppCompatActivity() {
         })
     }
 
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            backgroundAnimation?.start()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        backgroundAnimation?.start()
+    }
+
+    override fun onPause() {
+        backgroundAnimation?.stop()
+        super.onPause()
+    }
     // ✅ Unified function for button/dot visibility
     private fun updateUIForPage(position: Int, totalPages: Int) {
         when (position) {

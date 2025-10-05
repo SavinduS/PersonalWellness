@@ -57,7 +57,7 @@ class Profile : Fragment() {
 
         // Fetch stored values or use defaults
         val userName = sharedPreferences?.getString("USER_NAME", "Savindu") ?: "Savindu"
-        val userEmail = sharedPreferences?.getString("USER_EMAIL", "savindu@example.com") ?: "savindu@example.com"
+        val userEmail = sharedPreferences?.getString("USER_EMAIL", "savindu@gmail.com") ?: "savindu@example.com"
 
         tvUserName.text = userName
         tvUserEmail.text = userEmail
