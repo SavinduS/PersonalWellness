@@ -86,9 +86,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:progressDrawable="@android:drawable/progress_horizontal"
+        android:progressDrawable="@drawable/widget_progress_bar"
         android:max="100"
-        android:progressTint="@color/colorPrimary"
         android:minHeight="12dp" />
 
     <TextView
