@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.personalwellness.R
+import com.example.personalwellness.widgets.WellnessWidgetProvider
 import com.google.android.material.tabs.TabLayout
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
@@ -139,6 +140,7 @@ class Mood : Fragment() {
         prefs.edit().putString(moodKey, jsonArray.toString()).apply()
         resetInputs()
         loadRecentMoods()
+        WellnessWidgetProvider.refreshWidget(requireContext())
     }
 
     private fun resetInputs() {
@@ -219,6 +221,7 @@ class Mood : Fragment() {
                 prefs.edit().putString(moodKey, newArray.toString()).apply()
                 loadRecentMoods()
                 Toast.makeText(requireContext(), "Mood deleted successfully!", Toast.LENGTH_SHORT).show()
+                WellnessWidgetProvider.refreshWidget(requireContext())
             }
             .setNegativeButton("No", null)
             .show()
