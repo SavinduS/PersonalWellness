@@ -71,6 +71,7 @@
         app:tabIndicator="@null"
         app:tabBackground="@drawable/tab_indicator_selector"
         app:tabGravity="center"
+        app:tabMinWidth="24dp"
         app:layout_constraintBottom_toTopOf="@id/nav_buttons"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

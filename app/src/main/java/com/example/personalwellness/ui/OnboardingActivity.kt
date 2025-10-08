@@ -6,6 +6,7 @@ import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.personalwellness.MainActivity
@@ -84,7 +85,19 @@ class OnboardingActivity : AppCompatActivity() {
 
         // Attach dots (TabLayout)
         TabLayoutMediator(tabLayout, viewPager) { _, _ -> }.attach()
-
+        val tabStrip = tabLayout.getChildAt(0) as? LinearLayout
+        val indicatorSpacing = resources.getDimensionPixelSize(R.dimen.onboarding_indicator_spacing)
+        tabStrip?.let { strip ->
+            for (index in 0 until strip.childCount) {
+                val tabView = strip.getChildAt(index)
+                val layoutParams = tabView.layoutParams as? LinearLayout.LayoutParams ?: continue
+                layoutParams.marginStart = indicatorSpacing
+                layoutParams.marginEnd = indicatorSpacing
+                tabView.layoutParams = layoutParams
+                tabView.requestLayout()
+            }
+            strip.requestLayout()
+        }
         // ✅ Force initial UI update
         updateUIForPage(startPage, fragments.size)
 
