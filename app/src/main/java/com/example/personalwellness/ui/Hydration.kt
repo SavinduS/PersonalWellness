@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.example.personalwellness.R
 import com.example.personalwellness.receivers.HydrationScheduler
 import com.example.personalwellness.utils.NotificationHelper
+import com.example.personalwellness.widgets.WellnessWidgetProvider
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -168,6 +169,8 @@ class Hydration : Fragment() {
             "Hydration Update",
             "You added $amount ml. Total: $currentIntake / $dailyGoal ml"
         )
+
+        WellnessWidgetProvider.refreshWidget(requireContext())
     }
 
     /** Updates progress bar and text */
@@ -250,6 +253,8 @@ class Hydration : Fragment() {
         waterHistory.addView(subtext)
 
         Toast.makeText(requireContext(), "Hydration data reset!", Toast.LENGTH_SHORT).show()
+
+        WellnessWidgetProvider.refreshWidget(requireContext())
     }
 
     /** Schedules hydration reminders */

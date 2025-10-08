@@ -34,4 +34,13 @@
     <string name="notification_channel_hydration_description">Notifications to remind you to drink water regularly.</string>
     <string name="notification_hydration_title">Hydration Reminder</string>
     <string name="notification_hydration_message">Time to drink some water and stay refreshed!</string>
+
+    <!-- Widget -->
+    <string name="widget_title">Wellness Snapshot</string>
+    <string name="widget_subtitle">Quick view of your day</string>
+    <string name="widget_mood_label">Current Mood</string>
+    <string name="widget_mood_empty">No mood logged yet</string>
+    <string name="widget_water_label">Water Intake</string>
+    <string name="widget_water_value">%1$d / %2$d ml</string>
+    <string name="widget_water_percent">%1$d%% of daily goal</string>
 </resources>
